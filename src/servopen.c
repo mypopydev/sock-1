@@ -19,20 +19,20 @@
 int
 servopen(char *host, char *port)
 {
-	int					fd, newfd, i, on, pid;
-	char				*protocol;
+	int   fd, newfd, i, on, pid;
+	char  *protocol;
 	struct in_addr		inaddr;
 	struct servent		*sp;
 
 	protocol = udp ? "udp" : "tcp";
 
-		/* Initialize the socket address structure */
+	/* Initialize the socket address structure */
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family      = AF_INET;
 
-		/* Caller normally wildcards the local Internet address, meaning
-		   a connection will be accepted on any connected interface.
-		   We only allow an IP address for the "host", not a name. */
+        /* Caller normally wildcards the local Internet address, meaning
+           a connection will be accepted on any connected interface.
+           We only allow an IP address for the "host", not a name. */
 	if (host == NULL)
 		servaddr.sin_addr.s_addr = htonl(INADDR_ANY);		/* wildcard */
 	else {
@@ -41,7 +41,7 @@ servopen(char *host, char *port)
 		servaddr.sin_addr = inaddr;
 	}
 
-		/* See if "port" is a service name or number */
+        /* See if "port" is a service name or number */
 	if ( (i = atoi(port)) == 0) {
 		if ( (sp = getservbyname(port, protocol)) == NULL)
 			err_ret("getservbyname() error for: %s/%s", port, protocol);
@@ -67,7 +67,7 @@ servopen(char *host, char *port)
 	}
 #endif
 
-		/* Bind our well-known port so the client can connect to us. */
+        /* Bind our well-known port so the client can connect to us. */
 	if (bind(fd, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0)
 		err_sys("can't bind local address");
 
@@ -88,7 +88,6 @@ servopen(char *host, char *port)
 			if (connect(fd, (struct sockaddr *) &cliaddr, sizeof(cliaddr))
 																		  < 0)
 				err_sys("connect() error");
-			
 		}
 
 		sockopts(fd, 1);
@@ -97,7 +96,7 @@ servopen(char *host, char *port)
 	}
 
 	buffers(fd);		/* may set receive buffer size; must do here to get
-						   correct window advertised on SYN */
+				   correct window advertised on SYN */
 	sockopts(fd, 0);	/* only set some socket options for fd */
 
 	listen(fd, listenq);
@@ -126,16 +125,16 @@ servopen(char *host, char *port)
 			}
 		}
 
-			/* child (or iterative server) continues here */
+                /* child (or iterative server) continues here */
 		if (verbose) {
-				/* Call getsockname() to find local address bound to socket:
-				   local internet address is now determined (if multihomed). */
+                        /* Call getsockname() to find local address bound to socket:
+                           local internet address is now determined (if multihomed). */
 			i = sizeof(servaddr);
 			if (getsockname(newfd, (struct sockaddr *) &servaddr, &i) < 0)
 				err_sys("getsockname() error");
 
-						/* Can't do one fprintf() since inet_ntoa() stores
-						   the result in a static location. */
+                        /* Can't do one fprintf() since inet_ntoa() stores
+                           the result in a static location. */
 			fprintf(stderr, "connection on %s.%d ",
 					INET_NTOA(servaddr.sin_addr), ntohs(servaddr.sin_port));
 			fprintf(stderr, "from %s.%d\n",

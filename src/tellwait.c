@@ -3,7 +3,7 @@
 #include	"ourhdr.h"
 
 static volatile sig_atomic_t	sigflag;
-								/* set nonzero by signal handler */
+/* set nonzero by signal handler */
 static sigset_t			newmask, oldmask, zeromask;
 
 static void
@@ -26,7 +26,7 @@ TELL_WAIT()
 	sigemptyset(&newmask);
 	sigaddset(&newmask, SIGUSR1);
 	sigaddset(&newmask, SIGUSR2);
-		/* block SIGUSR1 and SIGUSR2, and save current signal mask */
+        /* block SIGUSR1 and SIGUSR2, and save current signal mask */
 	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)
 		err_sys("SIG_BLOCK error");
 }
@@ -62,7 +62,7 @@ WAIT_CHILD(void)
 		sigsuspend(&zeromask);	/* and wait for child */
 
 	sigflag = 0;
-			/* reset signal mask to original value */
+        /* reset signal mask to original value */
 	if (sigprocmask(SIG_SETMASK, &oldmask, NULL) < 0)
 		err_sys("SIG_SETMASK error");
 }

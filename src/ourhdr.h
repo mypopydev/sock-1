@@ -41,18 +41,18 @@ typedef	void	Sigfunc(int);	/* for signal handlers */
 #define	max(a,b)	((a) > (b) ? (a) : (b))
 
 					/* prototypes for our own functions */
-char   *path_alloc(int *);			/* {Prog pathalloc} */
-int		 open_max(void);			/* {Prog openmax} */
-void	clr_fl(int, int);			/* {Prog setfl} */
-void	set_fl(int, int);			/* {Prog setfl} */
-void	pr_exit(int);				/* {Prog prexit} */
+char   *path_alloc(int *);		/* {Prog pathalloc} */
+int	open_max(void);			/* {Prog openmax} */
+void	clr_fl(int, int);		/* {Prog setfl} */
+void	set_fl(int, int);		/* {Prog setfl} */
+void	pr_exit(int);			/* {Prog prexit} */
 void	pr_mask(const char *);		/* {Prog prmask} */
 Sigfunc	*signal_intr(int, Sigfunc *);/* {Prog signal_intr_function} */
 
-int	tty_cbreak(int);			/* {Prog raw} */
-int	tty_raw(int);				/* {Prog raw} */
-int	tty_reset(int);			/* {Prog raw} */
-void	tty_atexit(void);			/* {Prog raw} */
+int	tty_cbreak(int);		 /* {Prog raw} */
+int	tty_raw(int);			 /* {Prog raw} */
+int	tty_reset(int);			 /* {Prog raw} */
+void	tty_atexit(void);		 /* {Prog raw} */
 #ifdef	ECHO	/* only if <termios.h> has been included */
 struct termios	*tty_termios(void);	/* {Prog raw} */
 #endif
@@ -79,7 +79,7 @@ int	ptys_open(int, char *);	/* {Progs ptyopen_svr4 ptyopen_44bsd} */
 pid_t	pty_fork(int *, char *, const struct termios *,
 		  const struct winsize *);	/* {Prog ptyfork} */
 #endif
-	
+
 int	lock_reg(int, int, int, off_t, int, off_t);
 									/* {Prog lockreg} */
 #define	read_lock(fd, offset, whence, len) \

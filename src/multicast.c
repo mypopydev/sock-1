@@ -24,10 +24,10 @@ join_mcast(int fd, struct sockaddr_in *sin)
 	mreq.imr_multiaddr.s_addr = inaddr;
 	mreq.imr_interface.s_addr = htonl(INADDR_ANY);	/* need way to change */
 	if (setsockopt(fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq,
-												sizeof(mreq)) == -1 )
+                       sizeof(mreq)) == -1 )
 		err_sys("IP_ADD_MEMBERSHIP error");
 
 	if (verbose)
-			fprintf(stderr, "multicast group joined\n");
+                fprintf(stderr, "multicast group joined\n");
 #endif	/* IP_ADD_MEMBERSHIP */
 }

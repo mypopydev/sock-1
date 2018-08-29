@@ -25,26 +25,26 @@ sink_tcp(int sockfd)
 	oncemore:
 		if ( (n = recv(sockfd, rbuf, readlen, flags)) < 0) {
 			err_sys("recv error");
-			
+
 		} else if (n == 0) {
 			if (verbose)
 				fprintf(stderr, "connection closed by peer\n");
 			break;
-			
+
 #ifdef	notdef		/* following not possible with TCP */
 		} else if (n != readlen)
 			err_quit("read returned %d, expected %d", n, readlen);
 #else
 		}
 #endif
-	
+
 		if (verbose)
 			fprintf(stderr, "received %d bytes%s\n", n,
 				(flags == MSG_PEEK) ? " (MSG_PEEK)" : "");
-		
+
 		if (pauserw)
 			sleep_us(pauserw*1000);
-		
+
 		if (flags != 0) {
 			flags = 0;		/* no infinite loop */
 			goto oncemore;	/* read the message again */

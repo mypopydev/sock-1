@@ -18,14 +18,14 @@
 #include <getopt.h>
 #endif
 #include <string.h>
-#include	"sock.h"
+#include "sock.h"
 
 char	*host;		/* hostname or dotted-decimal string */
 char	*port;
 
 			/* DefinE global variables */
 int		bindport;			/* 0 or TCP or UDP port number to bind */
-							/* set by -b or -l options */
+						/* set by -b or -l options */
 int		broadcast;			/* SO_BROADCAST */
 int		cbreak;				/* set terminal to cbreak mode */
 int		chunkwrite;			/* write in small chunks; not all-at-once */
@@ -110,7 +110,7 @@ main(int argc, char *argv[])
 			if ( (ptr = strrchr(optarg, '.')) == NULL)
 				usage("invalid -f option");
 
-			*ptr++ = 0;					/* null replaces final period */
+			*ptr++ = 0;			/* null replaces final period */
 			foreignport = atoi(ptr);	/* port number */
 			strcpy(foreignip, optarg);	/* save dotted-decimal IP */
 			break;
@@ -141,7 +141,7 @@ main(int argc, char *argv[])
 			if ( (ptr = strrchr(optarg, '.')) == NULL)
 				usage("invalid -l option");
 
-			*ptr++ = 0;					/* null replaces final period */
+			*ptr++ = 0;			/* null replaces final period */
 			bindport = atoi(ptr);		/* port number */
 			strcpy(localip, optarg);	/* save dotted-decimal IP */
 			break;
@@ -309,7 +309,7 @@ main(int argc, char *argv[])
 		}
 	}
 
-		/* check for options that don't make sense */
+        /* check for options that don't make sense */
 	if (udp && halfclose)
 		usage("can't specify -h and -u");
 	if (udp && debug)
@@ -332,8 +332,8 @@ main(int argc, char *argv[])
 		port = argv[optind+1];
 
 	} else {
-			/* If server specifies host and port, then local address is
-			   bound to the "host" argument, instead of being wildcarded. */
+                /* If server specifies host and port, then local address is
+                   bound to the "host" argument, instead of being wildcarded. */
 		if (optind == argc-2) {
 			host = argv[optind];
 			port = argv[optind+1];
@@ -362,7 +362,7 @@ main(int argc, char *argv[])
 				sink_tcp(fd);
 		}
 
-	} else {				/* copy stdin/stdout to/from socket */
+	} else {			/* copy stdin/stdout to/from socket */
 		if (udp)
 			loop_udp(fd);
 		else

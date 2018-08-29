@@ -15,25 +15,25 @@
 
 void loop_tcp(int sockfd)
 {
-	int		maxfdp1, nread, ntowrite, stdineof, flags;
+	int maxfdp1, nread, ntowrite, stdineof, flags;
 	fd_set	rset;
-  
+
 	if (pauseinit)
 		sleep_us(pauseinit*1000);	/* intended for server */
-  
+
 	flags = 0;
 	stdineof = 0;
 	FD_ZERO(&rset);
 	maxfdp1 = sockfd + 1;	/* check descriptors [0..sockfd] */
-  
+
 	for ( ; ; ) {
 		if (stdineof == 0)
 			FD_SET(STDIN_FILENO, &rset);
 		FD_SET(sockfd, &rset);
-      
+
 		if (select(maxfdp1, &rset, NULL, NULL, NULL) < 0)
 			err_sys("select error");
-      
+
 		if (FD_ISSET(STDIN_FILENO, &rset)) {
 			/* data to read on stdin */
 			if ( (nread = read(STDIN_FILENO, rbuf, readlen)) < 0)
@@ -43,14 +43,14 @@ void loop_tcp(int sockfd)
 				if (halfclose) {
 					if (shutdown(sockfd, SHUT_WR) < 0)
 						err_sys("shutdown() error");
-		
+
 					FD_CLR(STDIN_FILENO, &rset);
 					stdineof = 1;	/* don't read stdin anymore */
 					continue;		/* back to select() */
 				}
 				break;		/* default: stdin EOF -> done */
 			}
-	  
+
 			if (crlf) {
 				ntowrite = crlf_add(wbuf, writelen, rbuf, nread);
 				if (dowrite(sockfd, wbuf, ntowrite) != ntowrite)
@@ -60,7 +60,7 @@ void loop_tcp(int sockfd)
 					err_sys("write error");
 			}
 		}
-      
+
 		if (FD_ISSET(sockfd, &rset)) {
 			/* data to read from socket */
 			/* msgpeek = 0 or MSG_PEEK */
@@ -82,20 +82,20 @@ void loop_tcp(int sockfd)
 				if (writen(STDOUT_FILENO, rbuf, nread) != nread)
 					err_sys("writen error to stdout");
 			}
-	  
+
 			if (flags != 0) {
 				flags = 0;		/* no infinite loop */
 				goto oncemore;	/* read the message again */
 			}
 		}
 	}
-  
+
 	if (pauseclose) {
 		if (verbose)
 			fprintf(stderr, "pausing before close\n");
 		sleep_us(pauseclose*1000);
 	}
-  
+
 	if (close(sockfd) < 0)
 		err_sys("close error");		/* since SO_LINGER may be set */
 }

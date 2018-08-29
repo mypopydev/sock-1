@@ -9,7 +9,7 @@ void
 sleep_us(unsigned int nusecs)
 {
 	struct timeval	tval;
-	
+
 	for ( ; ; ) {
 		tval.tv_sec = nusecs / 1000000;
 		tval.tv_usec = nusecs % 1000000;

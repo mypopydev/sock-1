@@ -19,25 +19,25 @@ int cliopen(char *host, char *port)
 	struct hostent		*hp;
 
 	protocol = udp ? "udp" : "tcp";
-  
+
 	/* initialize socket address structure */
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-  
+
 	/* see if "port" is a service name or number */
 	if ( (i = atoi(port)) == 0) {
 		if ( (sp = getservbyname(port, protocol)) == NULL)
 			err_quit("getservbyname() error for: %s/%s", port, protocol);
-      
+
 		servaddr.sin_port = sp->s_port;
 	} else
 		servaddr.sin_port = htons(i);
-  
+
 	/*
 	 * First try to convert the host name as a dotted-decimal number.
 	 * Only if that fails do we call gethostbyname().
 	 */
-  
+
 	if (inet_aton(host, &inaddr) == 1)
 		servaddr.sin_addr = inaddr;	/* it's dotted-decimal */
 	else if ( (hp = gethostbyname(host)) != NULL)
@@ -71,7 +71,7 @@ int cliopen(char *host, char *port)
 	 * (and port) using -l option.  Allow localip[] to be set but bindport
 	 * to be 0.
 	 */
-	
+
 	if (bindport != 0 || localip[0] != 0 || udp) {
 		bzero(&cliaddr, sizeof(cliaddr));
 		cliaddr.sin_family      = AF_INET;
@@ -81,22 +81,22 @@ int cliopen(char *host, char *port)
 				err_quit("invalid IP address: %s", localip);
 		} else
 			cliaddr.sin_addr.s_addr = htonl(INADDR_ANY);	/* wildcard */
-		
+
 		if (bind(fd, (struct sockaddr *) &cliaddr, sizeof(cliaddr)) < 0)
 			err_sys("bind() error");
 	}
-	
+
 	/* Need to allocate buffers before connect(), since they can affect
 	 * TCP options (window scale, etc.).
 	 */
-	
+
 	buffers(fd);
 	sockopts(fd, 0);	/* may also want to set SO_DEBUG */
-	
+
 	/*
 	 * Connect to the server.  Required for TCP, optional for UDP.
 	 */
-	
+
 	if (udp == 0 || connectudp) {
 		for ( ; ; ) {
 			if (connect(fd, (struct sockaddr *) &servaddr, sizeof(servaddr))
@@ -109,7 +109,7 @@ int cliopen(char *host, char *port)
 			err_sys("connect() error");
 		}
 	}
-  
+
 	if (verbose) {
 		/* Call getsockname() to find local address bound to socket:
 		   TCP ephemeral port was assigned by connect() or bind();
@@ -117,7 +117,7 @@ int cliopen(char *host, char *port)
 		i = sizeof(cliaddr);
 		if (getsockname(fd, (struct sockaddr *) &cliaddr, &i) < 0)
 			err_sys("getsockname() error");
-		
+
 		/* Can't do one fprintf() since inet_ntoa() stores
 		   the result in a static location. */
 		fprintf(stderr, "connected on %s.%d ",
@@ -125,8 +125,8 @@ int cliopen(char *host, char *port)
 		fprintf(stderr, "to %s.%d\n",
 			INET_NTOA(servaddr.sin_addr), ntohs(servaddr.sin_port));
 	}
-	
+
 	sockopts(fd, 1);	/* some options get set after connect() */
-	
+
 	return(fd);
 }

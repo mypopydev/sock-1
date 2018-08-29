@@ -36,10 +36,10 @@ crlf_add(char *dst, int dstsize, const char *src, int lenin)
 int
 crlf_strip(char *dst, int dstsize, const char *src, int lenin)
 {
-	int		lenout;
+	int	lenout;
 	char	c;
 
-	for (lenout = 0; lenin > 0; lenin--) { 
+	for (lenout = 0; lenin > 0; lenin--) {
 		if ( (c = *src++) != '\r') {
 			if (++lenout >= dstsize)
 				err_quit("crlf_strip: destination not big enough");

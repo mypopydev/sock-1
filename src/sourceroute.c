@@ -30,8 +30,8 @@
  */
 
 u_char	sroute_opt[44];		/* some implementations require this to be
-							   on a 4-byte boundary */
-u_char	*optr;				/* pointer into options being formed */
+                                   on a 4-byte boundary */
+u_char	*optr;		        /* pointer into options being formed */
 
 /*
  * Process either the -g (loose) or -G (strict) command-line option,
@@ -110,6 +110,6 @@ sroute_set(int sockfd)
 	if (setsockopt(sockfd, IPPROTO_IP, IP_OPTIONS,
 		       sroute_opt, optr - sroute_opt) < 0)
 		err_sys("setsockopt error for IP_OPTIONS");
-	
+
 	sroute_cnt = 0;		/* don't call this function again */
 }

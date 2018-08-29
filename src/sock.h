@@ -27,7 +27,7 @@
 #ifdef	__bsdi__
 #include <machine/endian.h> /* required before tcp.h, for BYTE_ORDER */
 #endif
-#include <netinet/tcp.h>	   /* TCP_NODELAY */
+#include <netinet/tcp.h>   /* TCP_NODELAY */
 #include <netdb.h>	   /* getservbyname(), gethostbyname() */
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -125,7 +125,7 @@ extern struct sockaddr_in	cliaddr, servaddr;
 #define	INET_NTOA(foo)	inet_ntoa(foo)
 #endif
 
-				/* function prototypes */
+/* function prototypes */
 void	buffers(int);
 int     cliopen(char *, char *);
 int	crlf_add(char *, int, const char *, int);
@@ -134,7 +134,7 @@ void	join_mcast(int, struct sockaddr_in *);
 void	loop_tcp(int);
 void	loop_udp(int);
 void	pattern(char *, int);
-int		servopen(char *, char *);
+int	servopen(char *, char *);
 void	sink_tcp(int);
 void	sink_udp(int);
 void	source_tcp(int);
